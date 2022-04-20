@@ -1,7 +1,5 @@
 import Head from 'next/head'
-import Footer from '../components/footer'
 import GalleryImage from '../components/galleryImage'
-import Header from '../components/header'
 import Layout from '../components/layout'
 import { getAllMacroImagesForHome } from '../lib/api'
 import { default as GalleryImageType } from '../types/galleryImage'

@@ -72,7 +72,7 @@ export const getStaticPaths = async () => {
       allMacroImages?.map(
         (macroImage: any) => `/images/${macroImage['full_slug']}`
       ) || [],
-    fallback: true,
+    fallback: false,
   }
 }
 
