@@ -7,7 +7,7 @@ import Layout from '../../components/layout'
 
 type Props = {
   macroImage: GalleryImage
-  preview: boolean
+  preview: boolean | null
 }
 
 const ImageDetails = ({ macroImage, preview }: Props) => {
@@ -46,7 +46,14 @@ const ImageDetails = ({ macroImage, preview }: Props) => {
   )
 }
 
-export const getStaticProps = async ({ params, preview = null }) => {
+type Params = {
+  params: {
+    slug: string[]
+  }
+  preview: boolean | null
+}
+
+export const getStaticProps = async ({ params, preview = null }: Params) => {
   const full_slug = params.slug?.join('/')
   const data = await getMacroImageBySlug(full_slug, preview)
 
