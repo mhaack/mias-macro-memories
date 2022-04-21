@@ -21,7 +21,7 @@ const GalleryImage = ({ image }: { image: GalleryImage }) => {
             className='transition-transform hover:scale-110'
           />
         </div>
-        <h3 className="mt-2 pl-4 text-lg">{imageContent.title}</h3>
+        <h2 className="mt-2 pl-4 text-lg">{imageContent.title}</h2>
         <i className="mt-1 pl-4 text-sm font-medium text-gray-400">
           {imageContent.latin}
         </i>

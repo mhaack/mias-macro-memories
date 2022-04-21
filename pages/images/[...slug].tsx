@@ -40,7 +40,7 @@ const ImageDetails = ({ macroImage, preview }: Props) => {
             unoptimized
           />
         </div>
-        <h3 className="mt-4 text-lg">{imageContent.title}</h3>
+        <h2 className="mt-4 text-lg">{imageContent.title}</h2>
         {latinSubtitle}
       </div>
     </Layout>
