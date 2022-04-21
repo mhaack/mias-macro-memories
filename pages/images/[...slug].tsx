@@ -41,12 +41,12 @@ const ImageDetails = ({ macroImage, preview }: Props) => {
             unoptimized
           />
         </div>
-        <div className="flex flex-row">
-          <div className="basis-1/2">
+        <div className="flex flex-col sm:flex-row">
+          <div className="sm:basis-1/2">
             <h2 className="text-lg">{imageContent.title}</h2>
             {latinSubtitle}
           </div>
-          <div className="basis-1/2 text-right">
+          <div className="sm:basis-1/2 sm:text-right">
             <TagList tags={macroImage.tag_list} />
           </div>
         </div>
