@@ -23,7 +23,7 @@ const ImageDetails = ({ macroImage, preview }: Props) => {
   return (
     <Layout>
       <Head>
-        <title>{imageContent.title} | Mia's Macro Memories</title>
+        <title>{imageContent.title} | Mia&apos;s Macro Memories</title>
       </Head>
       <BackLink />
       <div className="pt-8">
