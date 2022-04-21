@@ -4,6 +4,7 @@ import { getAllMacroImagesWithSlug, getMacroImageBySlug } from '../../lib/api'
 import GalleryImage from '../../types/galleryImage'
 import Layout from '../../components/layout'
 import BackLink from '../../components/backLink'
+import TagList from '../../components/tagList'
 
 type Props = {
   macroImage: GalleryImage
@@ -13,9 +14,9 @@ type Props = {
 const ImageDetails = ({ macroImage, preview }: Props) => {
   const imageContent = macroImage.content
   const latinSubtitle = imageContent.latin ? (
-    <i className="mt-1 text-sm font-medium text-gray-400">
+    <h3 className="mt-1 text-sm font-medium italic text-gray-400">
       {imageContent.latin}
-    </i>
+    </h3>
   ) : (
     ''
   )
@@ -40,8 +41,15 @@ const ImageDetails = ({ macroImage, preview }: Props) => {
             unoptimized
           />
         </div>
-        <h3 className="mt-4 text-lg">{imageContent.title}</h3>
-        {latinSubtitle}
+        <div className="flex flex-col sm:flex-row">
+          <div className="sm:basis-1/2">
+            <h2 className="text-lg">{imageContent.title}</h2>
+            {latinSubtitle}
+          </div>
+          <div className="sm:basis-1/2 sm:text-right">
+            <TagList tags={macroImage.tag_list} />
+          </div>
+        </div>
       </div>
     </Layout>
   )
