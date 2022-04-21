@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { getAllMacroImagesWithSlug, getMacroImageBySlug } from '../../lib/api'
 import GalleryImage from '../../types/galleryImage'
 import Layout from '../../components/layout'
-import BackLink from '../../components/back-link'
+import BackLink from '../../components/backLink'
 
 type Props = {
   macroImage: GalleryImage

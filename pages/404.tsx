@@ -1,4 +1,4 @@
-import BackLink from '../components/back-link'
+import BackLink from '../components/backLink'
 import Layout from '../components/layout'
 
 export default function Custom404() {
