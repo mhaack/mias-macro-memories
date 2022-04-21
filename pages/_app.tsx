@@ -4,7 +4,7 @@ import type { AppProps } from 'next/app'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <PlausibleProvider domain="mmm.pictures" customDomain='mmm.pictures'>
+    <PlausibleProvider domain="mmm.pictures" customDomain='/'>
       <Component {...pageProps} />
     </PlausibleProvider>
   )
