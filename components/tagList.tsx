@@ -1,6 +1,6 @@
 const TagList = ({ tags }: { tags: string[] }) => {
   if (tags === undefined) {
-    return ""
+    return (null)
   }
   return (
     <>
