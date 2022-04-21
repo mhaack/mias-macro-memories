@@ -1,9 +1,9 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import { getAllMacroImagesWithSlug, getMacroImageBySlug } from '../../lib/api'
-import Header from '../../components/header'
 import GalleryImage from '../../types/galleryImage'
 import Layout from '../../components/layout'
+import BackLink from '../../components/back-link'
 
 type Props = {
   macroImage: GalleryImage
@@ -25,6 +25,7 @@ const ImageDetails = ({ macroImage, preview }: Props) => {
       <Head>
         <title>{imageContent.title} | Mia's Macro Memories</title>
       </Head>
+      <BackLink />
       <div className="pt-8">
         <div className="aspect-w-3 aspect-h-2 overflow-hidden rounded-lg bg-gray-200">
           <Image
