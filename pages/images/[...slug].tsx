@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import Image, { ImageLoaderProps } from 'next/image'
-import { getAllMacroImagesWithSlug, getMacroImageBySlug } from '../../lib/api'
+import { getAllImagesWithSlug, getImageBySlug } from '../../lib/api'
 import GalleryImage from '../../types/galleryImage'
 import Layout from '../../components/layout'
 import BackLink from '../../components/backLink'
@@ -8,7 +8,7 @@ import TagList from '../../components/tagList'
 import { type } from 'os'
 
 type Props = {
-  macroImage: GalleryImage
+  image: GalleryImage
   preview: boolean | null
 }
 
@@ -22,8 +22,8 @@ const storyblokLoader = ({ src, width, quality }: ImageLoaderProps) => {
   return `${src}/${paramsString}`
 }
 
-const ImageDetails = ({ macroImage, preview }: Props) => {
-  const imageContent = macroImage.content
+const ImageDetails = ({ image, preview }: Props) => {
+  const imageContent = image.content
   const latinSubtitle = imageContent.latin ? (
     <h3 className="mt-1 text-sm font-medium italic text-gray-400">
       {imageContent.latin}
@@ -60,7 +60,7 @@ const ImageDetails = ({ macroImage, preview }: Props) => {
             {latinSubtitle}
           </div>
           <div className="sm:basis-1/2 sm:text-right">
-            <TagList tags={macroImage.tag_list} />
+            <TagList tags={image.tag_list} />
           </div>
         </div>
       </div>
@@ -77,22 +77,22 @@ type Params = {
 
 export const getStaticProps = async ({ params, preview = null }: Params) => {
   const full_slug = params.slug?.join('/')
-  const data = await getMacroImageBySlug(full_slug, preview)
+  const image = await getImageBySlug(full_slug, preview)
 
   return {
     props: {
       preview,
-      macroImage: data,
+      image,
     },
   }
 }
 
 export const getStaticPaths = async () => {
-  const allMacroImages = await getAllMacroImagesWithSlug()
+  const images = await getAllImagesWithSlug()
   return {
     paths:
-      allMacroImages?.map(
-        (macroImage: any) => `/images/${macroImage['full_slug']}`
+      images?.map(
+        (image: any) => `/images/${image['full_slug']}`
       ) || [],
     fallback: false,
   }
