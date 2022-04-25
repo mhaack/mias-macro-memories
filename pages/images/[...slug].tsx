@@ -16,7 +16,7 @@ const storyblokLoader = ({ src, width, quality }: ImageLoaderProps) => {
   const params = [
     'm',
     width + 'x0',
-    'filters:quality(' + (quality || '100') + ')',
+    'filters:quality(' + (quality || '90') + ')',
   ]
   const paramsString = params.join('/') + '/'
   return `${src}/${paramsString}`
