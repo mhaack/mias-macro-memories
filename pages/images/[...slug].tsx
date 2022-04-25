@@ -1,14 +1,25 @@
 import Head from 'next/head'
-import Image from 'next/image'
+import Image, { ImageLoaderProps } from 'next/image'
 import { getAllMacroImagesWithSlug, getMacroImageBySlug } from '../../lib/api'
 import GalleryImage from '../../types/galleryImage'
 import Layout from '../../components/layout'
 import BackLink from '../../components/backLink'
 import TagList from '../../components/tagList'
+import { type } from 'os'
 
 type Props = {
   macroImage: GalleryImage
   preview: boolean | null
+}
+
+const storyblokLoader = ({ src, width, quality }: ImageLoaderProps) => {
+  const params = [
+    'm',
+    width + 'x0',
+    'filters:quality(' + (quality || '100') + ')',
+  ]
+  const paramsString = params.join('/') + '/'
+  return `${src}/${paramsString}`
 }
 
 const ImageDetails = ({ macroImage, preview }: Props) => {
@@ -28,17 +39,19 @@ const ImageDetails = ({ macroImage, preview }: Props) => {
       </Head>
       <BackLink />
       <div className="pt-8">
-        <div className="aspect-w-3 aspect-h-2 overflow-hidden rounded-lg bg-gray-200">
+        <div className="my-4 overflow-hidden rounded-lg bg-gray-200">
           <Image
+            loader={storyblokLoader}
             alt={imageContent.title}
-            src={imageContent.image.filename + '/m/'}
-            layout="fill"
-            objectFit="cover"
+            src={imageContent.image.filename}
+            layout="responsive"
+            width={6000}
+            height={4000}
+            priority
             placeholder="blur"
             blurDataURL={
-              imageContent.image.filename + '/m/500x0/filters:blur(10)'
+              imageContent.image.filename + '/m/200x0/filters:blur(10)'
             }
-            unoptimized
           />
         </div>
         <div className="flex flex-col sm:flex-row">
