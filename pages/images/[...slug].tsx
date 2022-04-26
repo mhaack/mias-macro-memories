@@ -5,7 +5,9 @@ import GalleryImage from '../../types/galleryImage'
 import Layout from '../../components/layout'
 import BackLink from '../../components/backLink'
 import TagList from '../../components/tagList'
-import { type } from 'os'
+import { useState } from 'react'
+import Lightbox from 'react-image-lightbox'
+import 'react-image-lightbox/style.css'
 
 type Props = {
   image: GalleryImage
@@ -23,6 +25,11 @@ const storyblokLoader = ({ src, width, quality }: ImageLoaderProps) => {
 }
 
 const ImageDetails = ({ image, preview }: Props) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const toggleIsOpen = () => {
+    setIsOpen(!isOpen)
+  }
+
   const imageContent = image.content
   const latinSubtitle = imageContent.latin ? (
     <h3 className="mt-1 text-sm font-medium italic text-gray-400">
@@ -44,16 +51,29 @@ const ImageDetails = ({ image, preview }: Props) => {
             loader={storyblokLoader}
             alt={imageContent.title}
             src={imageContent.image.filename}
+            onClick={toggleIsOpen}
             layout="responsive"
-            width={6000}
-            height={4000}
+            width={3000}
+            height={1500}
             priority
             placeholder="blur"
             blurDataURL={
               imageContent.image.filename + '/m/200x0/filters:blur(10)'
             }
           />
+
+          {isOpen && (
+            <Lightbox
+              mainSrc={imageContent.image.filename + '/m/'}
+              mainSrcThumbnail={
+                imageContent.image.filename + '/m/200x0/filters:blur(10)'
+              }
+              imageTitle={imageContent.title}
+              onCloseRequest={toggleIsOpen}
+            />
+          )}
         </div>
+
         <div className="flex flex-col sm:flex-row">
           <div className="sm:basis-1/2">
             <h2 className="text-lg">{imageContent.title}</h2>
@@ -90,10 +110,7 @@ export const getStaticProps = async ({ params, preview = null }: Params) => {
 export const getStaticPaths = async () => {
   const images = await getAllImagesWithSlug()
   return {
-    paths:
-      images?.map(
-        (image: any) => `/images/${image['full_slug']}`
-      ) || [],
+    paths: images?.map((image: any) => `/images/${image['full_slug']}`) || [],
     fallback: false,
   }
 }
