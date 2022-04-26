@@ -46,35 +46,45 @@ const ImageDetails = ({ image, preview }: Props) => {
       </Head>
       <BackLink />
       <div className="pt-8">
-        <div className="my-4 overflow-hidden rounded-lg bg-gray-200">
+        <div className="container relative mx-auto">
           <Image
             loader={storyblokLoader}
             alt={imageContent.title}
             src={imageContent.image.filename}
             onClick={toggleIsOpen}
             layout="responsive"
-            width={3000}
-            height={1500}
+            className="h-auto w-full rounded-lg"
+            width={6000}
+            height={4000}
             priority
             placeholder="blur"
             blurDataURL={
               imageContent.image.filename + '/m/200x0/filters:blur(10)'
             }
           />
-
+          <div className="absolute top-2 left-2 h-2 w-2">
+            <button
+              onClick={toggleIsOpen}
+              type="button"
+              aria-label="Zoom in"
+              title="Zoom in"
+              className="ril-zoom-in ril__builtinButton ril__zoomInButton"
+            ></button>
+          </div>
           {isOpen && (
             <Lightbox
               mainSrc={imageContent.image.filename + '/m/'}
               mainSrcThumbnail={
-                imageContent.image.filename + '/m/200x0/filters:blur(10)'
+                imageContent.image.filename + '/m/200x0/filters:blur(30)'
               }
-              imageTitle={imageContent.title}
+              imageTitle="Mia's Macro Memories"
+              imageCaption={imageContent.title}
               onCloseRequest={toggleIsOpen}
             />
           )}
         </div>
 
-        <div className="flex flex-col sm:flex-row">
+        <div className="mt-4 flex flex-col sm:flex-row">
           <div className="sm:basis-1/2">
             <h2 className="text-lg">{imageContent.title}</h2>
             {latinSubtitle}
