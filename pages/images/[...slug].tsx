@@ -1,20 +1,23 @@
+import { useState } from 'react'
 import Head from 'next/head'
 import Image, { ImageLoaderProps } from 'next/image'
+import Lightbox from 'react-image-lightbox'
+import exifr, { Exifr } from 'exifr'
 import { getAllImagesWithSlug, getImageBySlug } from '../../lib/api'
 import GalleryImage from '../../types/galleryImage'
 import Layout from '../../components/layout'
 import BackLink from '../../components/backLink'
 import TagList from '../../components/tagList'
-import { useState } from 'react'
-import Lightbox from 'react-image-lightbox'
+import ImageMetaData from '../../components/imageMetaData'
 import 'react-image-lightbox/style.css'
 
 type Props = {
   image: GalleryImage
+  imageMetaData: any
   preview: boolean | null
 }
 
-const storyblokLoader = ({ src, width, quality }: ImageLoaderProps) => {
+const storyblokImageLoader = ({ src, width, quality }: ImageLoaderProps) => {
   const params = [
     'm',
     width + 'x0',
@@ -24,7 +27,7 @@ const storyblokLoader = ({ src, width, quality }: ImageLoaderProps) => {
   return `${src}/${paramsString}`
 }
 
-const ImageDetails = ({ image, preview }: Props) => {
+const ImageDetails = ({ image, imageMetaData, preview }: Props) => {
   const [isOpen, setIsOpen] = useState(false)
   const toggleIsOpen = () => {
     setIsOpen(!isOpen)
@@ -48,7 +51,7 @@ const ImageDetails = ({ image, preview }: Props) => {
       <div className="pt-8">
         <div className="container relative mx-auto">
           <Image
-            loader={storyblokLoader}
+            loader={storyblokImageLoader}
             alt={imageContent.title}
             src={imageContent.image.filename}
             onClick={toggleIsOpen}
@@ -93,6 +96,12 @@ const ImageDetails = ({ image, preview }: Props) => {
             <TagList tags={image.tag_list} />
           </div>
         </div>
+        <div className="mt-4 grid">
+          <ImageMetaData
+            imageMetaData={imageMetaData}
+            publishedDate={image.published_at}
+          />
+        </div>
       </div>
     </Layout>
   )
@@ -108,11 +117,19 @@ type Params = {
 export const getStaticProps = async ({ params, preview = null }: Params) => {
   const full_slug = params.slug?.join('/')
   const image = await getImageBySlug(full_slug, preview)
+  const imageMetaData = await exifr.parse(image.content.image.filename, [
+    'Make',
+    'Model',
+    'LensModel',
+    'ISO',
+    'FNumber',
+  ])
 
   return {
     props: {
       preview,
       image,
+      imageMetaData,
     },
   }
 }
