@@ -1,14 +1,16 @@
 import Head from 'next/head'
 import Image, { ImageLoaderProps } from 'next/image'
-import { getAllMacroImagesWithSlug, getMacroImageBySlug } from '../../lib/api'
+import { getAllImagesWithSlug, getImageBySlug } from '../../lib/api'
 import GalleryImage from '../../types/galleryImage'
 import Layout from '../../components/layout'
 import BackLink from '../../components/backLink'
 import TagList from '../../components/tagList'
-import { type } from 'os'
+import { useState } from 'react'
+import Lightbox from 'react-image-lightbox'
+import 'react-image-lightbox/style.css'
 
 type Props = {
-  macroImage: GalleryImage
+  image: GalleryImage
   preview: boolean | null
 }
 
@@ -22,8 +24,13 @@ const storyblokLoader = ({ src, width, quality }: ImageLoaderProps) => {
   return `${src}/${paramsString}`
 }
 
-const ImageDetails = ({ macroImage, preview }: Props) => {
-  const imageContent = macroImage.content
+const ImageDetails = ({ image, preview }: Props) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const toggleIsOpen = () => {
+    setIsOpen(!isOpen)
+  }
+
+  const imageContent = image.content
   const latinSubtitle = imageContent.latin ? (
     <h3 className="mt-1 text-sm font-medium italic text-gray-400">
       {imageContent.latin}
@@ -39,12 +46,14 @@ const ImageDetails = ({ macroImage, preview }: Props) => {
       </Head>
       <BackLink />
       <div className="pt-8">
-        <div className="my-4 overflow-hidden rounded-lg bg-gray-200">
+        <div className="container relative mx-auto">
           <Image
             loader={storyblokLoader}
             alt={imageContent.title}
             src={imageContent.image.filename}
+            onClick={toggleIsOpen}
             layout="responsive"
+            className="h-auto w-full rounded-lg"
             width={6000}
             height={4000}
             priority
@@ -53,14 +62,35 @@ const ImageDetails = ({ macroImage, preview }: Props) => {
               imageContent.image.filename + '/m/200x0/filters:blur(10)'
             }
           />
+          <div className="absolute top-2 left-2 h-2 w-2">
+            <button
+              onClick={toggleIsOpen}
+              type="button"
+              aria-label="Zoom in"
+              title="Zoom in"
+              className="ril-zoom-in ril__builtinButton ril__zoomInButton"
+            ></button>
+          </div>
+          {isOpen && (
+            <Lightbox
+              mainSrc={imageContent.image.filename + '/m/'}
+              mainSrcThumbnail={
+                imageContent.image.filename + '/m/200x0/filters:blur(30)'
+              }
+              imageTitle="Mia's Macro Memories"
+              imageCaption={imageContent.title}
+              onCloseRequest={toggleIsOpen}
+            />
+          )}
         </div>
-        <div className="flex flex-col sm:flex-row">
+
+        <div className="mt-4 flex flex-col sm:flex-row">
           <div className="sm:basis-1/2">
             <h2 className="text-lg">{imageContent.title}</h2>
             {latinSubtitle}
           </div>
           <div className="sm:basis-1/2 sm:text-right">
-            <TagList tags={macroImage.tag_list} />
+            <TagList tags={image.tag_list} />
           </div>
         </div>
       </div>
@@ -77,23 +107,20 @@ type Params = {
 
 export const getStaticProps = async ({ params, preview = null }: Params) => {
   const full_slug = params.slug?.join('/')
-  const data = await getMacroImageBySlug(full_slug, preview)
+  const image = await getImageBySlug(full_slug, preview)
 
   return {
     props: {
       preview,
-      macroImage: data,
+      image,
     },
   }
 }
 
 export const getStaticPaths = async () => {
-  const allMacroImages = await getAllMacroImagesWithSlug()
+  const images = await getAllImagesWithSlug()
   return {
-    paths:
-      allMacroImages?.map(
-        (macroImage: any) => `/images/${macroImage['full_slug']}`
-      ) || [],
+    paths: images?.map((image: any) => `/images/${image['full_slug']}`) || [],
     fallback: false,
   }
 }

@@ -1,14 +1,14 @@
-type GalleryImageContent = {
+type GalleryImageContentProps = {
   title: string
   latin?: string
   image: any
 }
 
-type GalleryImage = {
+type GalleryImageProps = {
   full_slug: string
   published_at: string
   tag_list: string[]
-  content: GalleryImageContent
+  content: GalleryImageContentProps
 }
 
-export default GalleryImage
+export default GalleryImageProps

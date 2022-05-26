@@ -1,30 +1,22 @@
-import GalleryImage from '../components/galleryImage'
+import { getAllImagesForHome } from '../lib/api'
 import Layout from '../components/layout'
-import { getAllMacroImagesForHome } from '../lib/api'
-import { default as GalleryImageType } from '../types/galleryImage'
+import GalleryProps from '../types/gallery'
+import Gallery from '../components/gallery'
 
-type Props = {
-  macroImages: GalleryImageType[]
-  preview: boolean
-}
-
-const Gallery = ({ macroImages, preview }: Props) => {
+const Home = ({ images, preview }: GalleryProps) => {
   return (
     <Layout>
-      <div className="grid grid-cols-1 gap-y-10 gap-x-6 pt-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-        {macroImages.map((image: any) => (
-          <GalleryImage key={image['full_slug']} image={image} />
-        ))}
-      </div>
+      <h2>A small macro photo gallery</h2>
+      <Gallery images={images} preview={preview} />
     </Layout>
   )
 }
 
 export const getStaticProps = async ({ preview = null }) => {
-  const macroImages = (await getAllMacroImagesForHome(preview)) || []
+  const images = (await getAllImagesForHome(preview)) || []
   return {
-    props: { macroImages, preview },
+    props: { images, preview },
   }
 }
 
-export default Gallery
+export default Home
