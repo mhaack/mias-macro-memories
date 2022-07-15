@@ -1,21 +1,11 @@
-import Image, { ImageLoaderProps } from 'next/image'
+import Image from 'next/image'
 import Link from 'next/link'
-import GalleryImage from '../types/galleryImage'
+import GalleryImageProps from '../types/galleryImage'
+import { storyblokImageLoader } from '../lib/utils'
 
-const storyblokImageLoader = ({ src, width, quality }: ImageLoaderProps) => {
-  const params = [
-    'm',
-    width + 'x0',
-    'filters:quality(' + (quality || '90') + ')',
-  ]
-  const paramsString = params.join('/') + '/'
-  return `${src}/${paramsString}`
-}
-
-const GalleryImage = ({ image }: { image: GalleryImage }) => {
+const GalleryImage = ({ image }: { image: GalleryImageProps }) => {
   const imageContent = image.content
   const imageFilename = imageContent.image.filename
-  const imageSizes = imageFilename.match('^.*\/154596\/(.*)x(.*?)\/');
 
   return (
     <Link href={`/images/${image['full_slug']}`}>
@@ -26,8 +16,6 @@ const GalleryImage = ({ image }: { image: GalleryImage }) => {
             quality="50"
             alt={imageContent.title} 
             src={imageFilename}
-            width={imageSizes[1]}
-            height={imageSizes[2]}
             sizes="50vw"
             layout="fill"
             objectFit="cover"

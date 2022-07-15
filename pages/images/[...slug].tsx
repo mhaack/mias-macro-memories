@@ -1,30 +1,21 @@
 import { useState } from 'react'
 import Head from 'next/head'
-import Image, { ImageLoaderProps } from 'next/image'
+import Image from 'next/image'
 import Lightbox from 'react-image-lightbox'
-import exifr, { Exifr } from 'exifr'
-import { getAllImagesWithSlug, getImageBySlug } from '../../lib/api'
+import exifr from 'exifr'
 import GalleryImage from '../../types/galleryImage'
 import Layout from '../../components/layout'
 import BackLink from '../../components/backLink'
 import TagList from '../../components/tagList'
 import ImageMetaData from '../../components/imageMetaData'
 import 'react-image-lightbox/style.css'
+import { getAllImagesWithSlug, getImageBySlug } from '../../lib/api'
+import { storyblokImageLoader } from '../../lib/utils'
 
 type Props = {
   image: GalleryImage
   imageMetaData: any
   preview: boolean | null
-}
-
-const storyblokImageLoader = ({ src, width, quality }: ImageLoaderProps) => {
-  const params = [
-    'm',
-    width + 'x0',
-    'filters:quality(' + (quality || '90') + ')',
-  ]
-  const paramsString = params.join('/') + '/'
-  return `${src}/${paramsString}`
 }
 
 const ImageDetails = ({ image, imageMetaData, preview }: Props) => {
